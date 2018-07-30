@@ -91,7 +91,6 @@ function rotatePet(sprite, event) {
         uiBlocked = true;
         clearSelection();
         sprite.alpha = .4;
-        selectedItem = sprite;
         
         var rotating = game.add.tween(game.pet).to({angle: 720}, 1000);
         rotating.onComplete.add(function() {
@@ -102,5 +101,15 @@ function rotatePet(sprite, event) {
         })
         
         rotating.start();
+    }
+}
+
+function placeItem(sprite, event) {
+    if(selectedItem) {
+        var x = event.position.x;
+        var y = event.position.y;
+        
+        var dropT = game.add.sprite(x, y, selectedItem.key);
+        dropT.anchor.setTo(.5);
     }
 }
