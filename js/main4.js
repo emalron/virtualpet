@@ -105,11 +105,28 @@ function rotatePet(sprite, event) {
 }
 
 function placeItem(sprite, event) {
-    if(selectedItem) {
+    if(selectedItem && !uiBlocked) {
+        uiBlocked = true;
+        
         var x = event.position.x;
         var y = event.position.y;
         
-        var dropT = game.add.sprite(x, y, selectedItem.key);
-        dropT.anchor.setTo(.5);
+        var newItem = game.add.sprite(x, y, selectedItem.key);
+        newItem.anchor.setTo(.5);
+        newItem.params = selectedItem.params;
+                
+        var assult = game.add.tween(game.pet).to({x: x, y: y}, 700);
+        assult.onComplete.add(function() {
+            uiBlocked = false;
+            
+            game.pet.params.health += newItem.params.health || 0;
+            game.pet.params.fun += newItem.params.fun || 0;
+            
+            console.log(game.pet.params);
+            
+            newItem.destroy();
+        });
+        
+        assult.start();
     }
 }
