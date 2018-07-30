@@ -1,7 +1,7 @@
 var gWid = 360;
 var gHig = 640;
 
-var game = new Phaser.Game(gWid, gHig, Phaser.Canvas);
+var game = new Phaser.Game(gWid, gHig, Phaser.AUTO);
 
 var state = {init: init, preload:preload, create:create};
 
