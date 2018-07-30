@@ -1,7 +1,7 @@
 var gWid = 360;
 var gHig = 640;
 
-var game = new Phaser.Game(gWid, gHig, Phaser.Auto);
+var game = new Phaser.Game(gWid, gHig, Phaser.Canvas);
 
 var state = {init: init, preload:preload, create:create};
 
@@ -14,6 +14,7 @@ function init() {
     game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
     game.scale.pageHorizontally = true;
     game.scale.pageVertically = true;
+
 }
 
 function preload() {
@@ -62,6 +63,10 @@ function create() {
     g.pet.inputEnabled = true;
     g.pet.input.enableDrag(true);
     g.pet.params = {health: 100, fun: 100};
+
+    var gui = new dat.GUI();
+    gui.add(g.pet.params, 'health', 0, 100).listen();
+    gui.add(g.pet.params, 'fun', 0, 100).listen();
 }
 
 var uiBlocked = false;
@@ -72,7 +77,6 @@ function pickItem(sprite, event) {
         clearSelection();
         sprite.alpha = .4;
         selectedItem = sprite;
-        
         console.log('pick item..');
     }
 }
