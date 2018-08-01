@@ -28,29 +28,29 @@ function preload() {
 function create() {
     var g = game;
     
-    g.background = game.add.sprite(0,0,'bg');
+    g.background = g.add.sprite(0,0,'bg');
     g.background.inputEnabled = true;
     g.background.events.onInputDown.add(placeItem, this);
     
-    g.apple = game.add.sprite(0.2*game.world.width, 0.9*game.world.height, 'apple');
+    g.apple = g.add.sprite(0.2*game.world.width, 0.9*game.world.height, 'apple');
     g.apple.anchor.setTo(.5);
     g.apple.inputEnabled = true;
     g.apple.events.onInputDown.add(pickItem, this);
     g.apple.params = {health: 20};
     
-    g.candy = game.add.sprite(0.4*game.world.width, 0.9*game.world.height, 'candy');
+    g.candy = g.add.sprite(0.4*game.world.width, 0.9*game.world.height, 'candy');
     g.candy.anchor.setTo(.5);
     g.candy.inputEnabled = true;
     g.candy.events.onInputDown.add(pickItem, this);
     g.candy.params = {health: -10, fun: 20};
     
-    g.toy = game.add.sprite(0.6*game.world.width, 0.9*game.world.height, 'toy');
+    g.toy = g.add.sprite(0.6*game.world.width, 0.9*game.world.height, 'toy');
     g.toy.anchor.setTo(.5);
     g.toy.inputEnabled = true;
     g.toy.events.onInputDown.add(pickItem, this);
     g.toy.params = {fun: 20};
     
-    g.rotate = game.add.sprite(0.8*game.world.width, 0.9*game.world.height, 'rotate');
+    g.rotate = g.add.sprite(0.8*game.world.width, 0.9*game.world.height, 'rotate');
     g.rotate.anchor.setTo(.5);
     g.rotate.inputEnabled = true;
     g.rotate.events.onInputDown.add(rotatePet, this);
@@ -59,13 +59,24 @@ function create() {
     
     g.buttons = [g.apple, g.candy, g.toy, g.rotate];
     
-    g.pet = game.add.sprite(0.4*game.world.width, 0.6*game.world.height, 'pet', 0);
+    g.pet = g.add.sprite(0.4*g.world.width, 0.6*g.world.height, 'pet', 0);
     g.pet.anchor.setTo(.5);
     g.pet.inputEnabled = true;
     g.pet.input.enableDrag(true);
     g.pet.params = {health: 100, fun: 100};
     
     g.pet.animations.add('yum', [1, 2, 3, 2, 1], 7, false);
+    
+    
+    // ui
+    var style = {font: '20px Arial', fill: '#000'};
+    g.add.text(10, 20, 'Health:', style);
+    g.add.text(140, 20, 'Fun:', style);
+    
+    g.healthDisplay = g.add.text(80,20, '', style);
+    g.funDisplay = g.add.text(185,20, '', style);
+    
+    updateStat();
 }
 
 var uiBlocked = false;
@@ -97,9 +108,11 @@ function rotatePet(sprite, event) {
         var rotating = game.add.tween(game.pet).to({angle: 720}, 1000);
         rotating.onComplete.add(function() {
             uiBlocked = false;
-            console.log(game.rotate.params.fun);
+            console.log(sprite.params);
             sprite.alpha = 1.0;
             selectedItem = null;
+            
+            changeStat(sprite);
         })
         
         rotating.start();
@@ -122,8 +135,8 @@ function placeItem(sprite, event) {
             uiBlocked = false;
             
             game.pet.animations.play('yum');
-            game.pet.params.health += newItem.params.health || 0;
-            game.pet.params.fun += newItem.params.fun || 0;
+            
+            changeStat(newItem);
             
             console.log(game.pet.params);
             
@@ -132,4 +145,18 @@ function placeItem(sprite, event) {
         
         assult.start();
     }
+}
+
+function changeStat(item) {
+    var g = game;
+    g.pet.params.health += item.params.health || 0;
+    g.pet.params.fun += item.params.fun || 0;
+    
+    updateStat();
+}
+
+function updateStat() {
+    var g = game;
+    g.healthDisplay.text = g.pet.params.health;
+    g.funDisplay.text = g.pet.params.fun;
 }
