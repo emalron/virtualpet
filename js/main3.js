@@ -29,6 +29,8 @@ function create() {
     var g = game;
     
     g.background = game.add.sprite(0,0,'bg');
+    g.background.inputEnabled = true;
+    g.background.events.onInputDown.add(placeItem, this);
     
     g.apple = game.add.sprite(0.2*game.world.width, 0.9*game.world.height, 'apple');
     g.apple.anchor.setTo(.5);
