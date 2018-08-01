@@ -26,6 +26,8 @@ function create() {
     g.rotate.events.onInputDown.add(rotatePet, this);
     g.background.inputEnabled = true;
     g.background.events.onInputDown.add(placeItem, this);
+    g.pet.inputEnabled = true;
+    g.pet.input.enableDrag(true);
     
     // make icon arrays
     g.icons = [g.apple, g.candy, g.toy, g.rotate];
