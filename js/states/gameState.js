@@ -97,6 +97,7 @@ function rotatePet(o, e) {
         let rot = game.add.tween(game.pet).to({angle:720}, 1000);
         rot.onComplete.add(function() {
             uiBlocked = false;
+            o.alpha = 1.0;
             updateStat(o);
         })
         rot.start();
