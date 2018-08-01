@@ -22,7 +22,7 @@ function preload() {
     game.load.image('candy', 'assets/images/candy.png');
     game.load.image('toy', 'assets/images/rubber_duck.png');
     game.load.image('rotate', 'assets/images/rotate.png');
-    game.load.spritesheet('pet', 'assets/images/pet.png', 97, 83, 5, 1);
+    game.load.spritesheet('pet', 'assets/images/pet.png', 97, 83, 5, 1, 1);
 }
 
 function create() {
@@ -59,11 +59,13 @@ function create() {
     
     g.buttons = [g.apple, g.candy, g.toy, g.rotate];
     
-    g.pet = game.add.sprite(0.4*game.world.width, 0.6*game.world.height, 'pet');
+    g.pet = game.add.sprite(0.4*game.world.width, 0.6*game.world.height, 'pet', 0);
     g.pet.anchor.setTo(.5);
     g.pet.inputEnabled = true;
     g.pet.input.enableDrag(true);
     g.pet.params = {health: 100, fun: 100};
+    
+    g.pet.animations.add('yum', [1, 2, 3, 2, 1], 7, false);
 }
 
 var uiBlocked = false;
@@ -119,6 +121,7 @@ function placeItem(sprite, event) {
         assult.onComplete.add(function() {
             uiBlocked = false;
             
+            game.pet.animations.play('yum');
             game.pet.params.health += newItem.params.health || 0;
             game.pet.params.fun += newItem.params.fun || 0;
             
