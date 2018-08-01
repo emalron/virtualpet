@@ -3,7 +3,7 @@ var gHig = 640;
 
 var game = new Phaser.Game(gWid, gHig, Phaser.Auto);
 
-var state = {init: init, preload:preload, create:create};
+var state = {init: init, preload:preload, create:create, update:update};
 
 game.state.add('state', state);
 game.state.start('state');
@@ -77,6 +77,23 @@ function create() {
     g.funDisplay = g.add.text(185,20, '', style);
     
     updateStat();
+    
+    // pet's stats decay every 5 seconds,
+    g.time.events.loop(5000, decayStat, this);
+}
+
+function update() {
+    let p = game.pet;
+    
+    if (p.params.health <= 0 || p.params.fun <=0) {
+        uiBlocked = true;
+        p.frame = 4;
+        
+        game.time.events.add(4000, function() {
+            uiBlocked = false;
+            game.state.restart();
+        })
+    }
 }
 
 var uiBlocked = false;
@@ -159,4 +176,13 @@ function updateStat() {
     var g = game;
     g.healthDisplay.text = g.pet.params.health;
     g.funDisplay.text = g.pet.params.fun;
+}
+
+function decayStat() {
+    let p = game.pet;
+    
+    p.params.health -= 10;
+    p.params.fun -= 15;
+    
+    updateStat();
 }
